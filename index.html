@@ -161,18 +161,36 @@ margin-top:30px
     </div>
   </div>
  </section>
+```html
 <script>
 const yearElement = document.getElementById('year');
+
 if (yearElement) {
   yearElement.textContent = new Date().getFullYear();
 }
-const img = document.getElementById('profileImg');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('.reveal');
+
+  if (!('IntersectionObserver' in window)) {
+    sections.forEach(section => section.classList.add('visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.05
   });
-}, {threshold: 0.12});
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  sections.forEach(section => observer.observe(section));
+});
 </script>
+```
 </body>
 </html>
